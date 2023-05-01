@@ -30,7 +30,7 @@ int print_bigS(va_list l, flags_t *f)
 			numb += _puts(res);
 		}
 		else
-			numb += _putchar(s[i]);
+			numb += _putchar(s[a]);
 	}
 	return (numb);
 }
