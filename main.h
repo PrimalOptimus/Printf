@@ -1,52 +1,104 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <stdarg.h>
-#include <unistd.h>
 #include <stdlib.h>
+#include <stdarg.h>
+#include <stdio.h>
+
+/**
+ * struct flags - struct containing flags to "turn on"
+ * when a flag specifier is passed to _printf()
+ * @plus: flag for the '+' character
+ * @space: flag for the ' ' character
+ * @hash: flag for the '#' character
+ */
+
+typedef struct flags
+{
+	int plus;
+	int space;
+	int hash;
+} flags_t;
+
+/**
+ *
+ * struct printHandler - struct to choose right function
+ * on the format specifier passed to _printf()
+ * @c: format specifier
+ * @f: pointer to the correct printing function
+ */
+typedef struct printHandler
+{
+	char c;
+	int (*f)(va_list ap, flags_t *f);
+} ph;
+
+/* print_nums */
+int print_int(va_list l, flags_t *f);
+void print_number(int n);
+int print_unsigned(va_list l, flags_t *f);
+int count_digit(int i);
+
+/* function to print_bases */
+int print_hex(va_list l, flags_t *f);
+int print_hex_big(va_list l, flags_t *f);
+int print_binary(va_list l, flags_t *f);
+int print_octal(va_list l, flags_t *f);
+
+/*
+ * converter function
+ */
+char *convert(unsigned long int num, int base, int lowercase);
+
+
+
+/* _printf function */
 
 int _printf(const char *format, ...);
+
+
+/* get_print */
+
+int (*get_print(char s))(va_list, flags_t *);
+
+
+/* get_flag */
+
+int get_flag(char s, flags_t *f);
+
+/* print_alpha funtions */
+
+int print_string(va_list l, flags_t *f);
+int print_char(va_list l, flags_t *f);
+
+/*
+ * write_functions
+ *
+ */
+
+int _puts(char *str);
 int _putchar(char c);
 
-/**
- * struct buffer_s - A new type defining a buffer struct.
- * @buffer: A pointer to a character array.
- * @start: A pointer to the start of buffer.
- * @len: The length of the string stored in buffer.
+
+/* 
+ * print_custom
+ * 
  */
-typedef struct buffer_s
-{
-	char *buffer;
-	char *start;
-	unsigned int len;
-} buffer_t;
+
+int print_rot13(va_list l, flags_t *f);
+int print_rev(va_list l, flags_t *f);
+int print_bigS(va_list l, flags_t *f);
 
 
-
-/**
- * struct flag_s - A new type defining a flags struct.
- * @flag: A character representing a flag.
- * @value: The integer value of the flag.
+/* 
+ * print_address
  */
-typedef struct flag_s
-{
-	unsigned char flag;
-	unsigned char value;
-} flag_t;
 
+int print_address(va_list l, flags_t *f);
 
-
-/**
- * struct converter_s - A new type defining a converter struct.
- * @specifier: A character representing a conversion specifier.
- * @func: A pointer to a conversion function corresponding to specifier.
- */
-typedef struct converter_s
-{
-	unsigned char specifier;
-	unsigned int (*func)(va_list, buffer_t *,
-			unsigned char, int, int, unsigned char);
-} converter_t;
-
+/* 
+ * print_percent
+ * */
+int print_percent(va_list l, flags_t *f);
 
 #endif
